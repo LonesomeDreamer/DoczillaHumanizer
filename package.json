@@ -1,0 +1,41 @@
+{
+  "name": "DoczillaHumanizer",
+  "version": "1.0.0",
+  "description": "Javascript port of Humanizer.NET. Adapted for Doczilla Project",
+  "main": "target/index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [
+    "humanize",
+    "tool",
+    "browser",
+    "nodejs",
+    "stringify",
+    "format"
+  ],
+  "author": "LonesomeDreamer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LonesomeDreamer/DoczillaHumanizer"
+  },
+  "homepage": "https://github.com/LonesomeDreamer/DoczillaHumanizer/-/blob/master/README.md",
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.10",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  }
+}
