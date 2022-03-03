@@ -1,1 +1,1 @@
-export {default as words} from "./words";
+export {default as HumanizerNumberSpeller} from "./HumanizerNumberSpeller";

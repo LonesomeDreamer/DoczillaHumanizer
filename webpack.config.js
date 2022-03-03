@@ -1,22 +1,26 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-	mode: "development",
-	devtool: "inline-source-map",
-	entry: './src/index.ts',
+	mode: "production",
+	entry: "./src/index.ts",
 	module: {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: 'ts-loader',
+				use: "ts-loader",
 			},
 		],
 	},
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js'],
+		extensions: [".tsx", ".ts", ".js"],
 	},
 	output: {
-		filename: 'index.js',
-		path: path.resolve(__dirname, 'target'),
+		library: {
+			name: "Humanizer",
+			type: "var",
+		},
+		filename: "index.js",
+		globalObject: "this",
+		path: path.resolve(__dirname, "target"),
 	},
 };
