@@ -1,6 +1,6 @@
 export default class BigDecimal {
 	// to preserve trailing zeroes in exponent, 'value' should be of String type
-    constructor(value: any) {
+	constructor(value: any) {
 		var originalValue: string = value.toString().trim();
 		if (!value.toString().includes('e')) {
 			// simplified parsing that allows to preserve exponent precision (e.g. 0.2000 instead of 0.2)
@@ -31,7 +31,7 @@ export default class BigDecimal {
 		}
 		this.precision = this.calculateIntegerLength();
 		this.stringifiedValue = this.stringifyIntCompact(originalValue);
-    }
+	}
 
 	intCompact: number;
 
@@ -53,7 +53,7 @@ export default class BigDecimal {
 		value = Math.abs(value);
 		var e: number = 1;
 		while ((Math.round(value * e) / e) !== value) {
-			 e *= 10;
+			e *= 10;
 		}
 		return Math.round(Math.log(e) / Math.LN10);
 	}
@@ -103,12 +103,11 @@ export default class BigDecimal {
 		return this.getStringifiedInt().length;
 	}
 
-	removeExponent(removeTrailingZeroes?: boolean): BigDecimal {
+	removeExponent(removeTrailingZero?: boolean): BigDecimal {
 		var stringifiedRemainder: string = this.getStringifiedRemainder();
-		if (removeTrailingZeroes == true) {
-			var value: any[] = stringifiedRemainder.match(/(.*?)0+$/);
-			if (value != null) {
-				stringifiedRemainder = value[1];
+		if (removeTrailingZero) {
+			if (stringifiedRemainder[stringifiedRemainder.length - 1] == '0') {
+				stringifiedRemainder = stringifiedRemainder.slice(0, -1);
 			}
 		}
 		return new BigDecimal(stringifiedRemainder);
