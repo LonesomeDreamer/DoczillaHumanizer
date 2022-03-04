@@ -1,4 +1,4 @@
-import {default as HumanizerSpellResult} from "../util/HumanizerSpellResult";
+import {default as HumanizerSpellResult} from "../util";
 import {default as HumanizerNumberSpeller} from "../number/HumanizerNumberSpeller";
 
 export default class Configurator {
