@@ -1,4 +1,4 @@
-export default class HumanizerDateSpeller {
+export default class HumanizerSpellResult {
 	constructor(number: string, unit: string) {
 		this.number = number;
 		this.unit = unit;
