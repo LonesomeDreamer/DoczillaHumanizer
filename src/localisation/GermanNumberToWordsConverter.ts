@@ -156,14 +156,13 @@ export default class GermanNumberToWordsConverter {
 	}
 
 	static parseCardinalNumber(number: any): string {
-		var signum = number.signum();
+		var signum: number = number.signum();
 		if (signum === 0) {
 			return this.getUnitValue(0, false);
 		}
 		var parts: string[] = [];
 		if (signum < 0) {
-			parts.push("minus ");
-			number.negate();
+			return "minus " + this.parseCardinalNumber(number.negate());
 		}
 
 		number = this.collectParts(parts, number, 18, true, " Trillionen", "eine Trillion");
@@ -192,14 +191,13 @@ export default class GermanNumberToWordsConverter {
 	}
 
 	static parseOrdinalNumber(number: any): string {
-		var signum = number.signum();
+		var signum: number = number.signum();
 		if (signum === 0) {
 			return this.getUnitValue(0, false) + "ter";
 		}
 		var parts: string[] = [];
 		if (signum < 0) {
-			parts.push("minus ");
-			number.negate();
+			return "minus " + this.parseOrdinalNumber(number.negate());
 		}
 
 		number = this.collectOrdinalParts(parts, number, 9, true, this.billionOrdinalPlural, this.billionOrdinalSingular);

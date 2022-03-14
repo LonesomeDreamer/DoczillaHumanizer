@@ -59,7 +59,8 @@ export default class BigDecimal {
 	}
 
 	signum(): number {
-		return this.intCompact > 0 ? 1 : this.intCompact == 0 ? 0 : -1;
+		var intCompact = this.intCompact;
+		return intCompact > 0 ? 1 : 1 / intCompact == 1 / +0 ? 0 : -1;
 	}
 
 	negate(): BigDecimal {
