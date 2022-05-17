@@ -4,6 +4,39 @@ import {EnglishNumberToWordsConverter} from "../localisation"
 import {GermanNumberToWordsConverter} from "../localisation"
 
 export default class HumanizerNumberSpeller {
+	static removePossessiveForm(unit: string): {isPossessive: boolean, unit: string} {
+		if (unit == null) {
+			return {isPossessive: false, unit: unit};
+		}
+
+		var possessiveForms = EnglishNumberToWordsConverter.possessiveForms;
+		var result: RegExpMatchArray = null;
+		for (var i: number = possessiveForms.length - 1; i >= 0; i--) {
+			if ((result = unit.match(possessiveForms[i])) != null) {
+				return {isPossessive: true, unit: result[1]};
+			}
+		}
+
+		return {isPossessive: false, unit: unit};
+
+	}
+
+	static addPossessiveForm(isPossessive: boolean, unit: string): string {
+		if (!isPossessive || (unit == null)) {
+			return unit;
+		}
+
+		var possessiveFormSpecialEndings = EnglishNumberToWordsConverter.possessiveFormSpecialEndings;
+		for (var i: number = possessiveFormSpecialEndings.length - 1; i >= 0; i--) {
+			if (possessiveFormSpecialEndings[i].test(unit)) {
+				return unit.concat("\'");
+			}
+		}
+
+		return unit.concat("\'s");
+
+	}
+
 	static isUncountable(unit: string): boolean {
 		return EnglishNumberToWordsConverter.uncountables[unit.toLowerCase() as keyof {}];
 	}
@@ -22,6 +55,17 @@ export default class HumanizerNumberSpeller {
 		return unit.replace(regex, replacement);
 	}
 
+	static parseRules(rules: {regex: RegExp, replacement: string}[], unit: string): string {
+		var result: string = unit;
+		for (var i: number = rules.length - 1; i >= 0; i--) {
+			if ((result = this.apply(rules[i], unit)) != null) {
+				break;
+			}
+		}
+
+		return result;
+	}
+
 	static applyRules(rules: {regex: RegExp, replacement: string}[], unit: string): string {
 		if (unit == null) {
 			return null;
@@ -34,11 +78,7 @@ export default class HumanizerNumberSpeller {
 		var result: string = unit;
 		var singulars = EnglishNumberToWordsConverter.singulars;
 
-		for (var i: number = singulars.length - 1; i >= 0; i--) {
-			if ((result = this.apply(singulars[i], unit)) != null) {
-				break;
-			}
-		}
+		result = this.parseRules(singulars, unit);
 
 		result = result == null ? unit : result;
 
@@ -47,11 +87,7 @@ export default class HumanizerNumberSpeller {
 		}
 
 		if (rules != singulars) {
-			for (var i: number = rules.length - 1; i >= 0; i--) {
-				if ((result = this.apply(rules[i], unit)) != null) {
-					break;
-				}
-			}
+			result = this.parseRules(rules, unit);
 		}
 
 		return result != null ? this.matchUpperCase(unit, result) : result;
@@ -137,10 +173,12 @@ export default class HumanizerNumberSpeller {
 		var result: {number: string, ordinal: boolean} = this.spellNumber(number, ordinal, locale);
 		spelledNumber = result.number;
 		ordinal = result.ordinal;
+		var possessiveForm = this.removePossessiveForm(unit);
+		unit = possessiveForm.unit;
 		if ((!ordinal) && (unit != null)) {
 			unit = this.spellUnit(number, unit);
 		}
-		return new HumanizerSpellResult(spelledNumber, unit);
+		return new HumanizerSpellResult(spelledNumber, this.addPossessiveForm(possessiveForm.isPossessive, unit));
 	}
 
 	spell(number: number | string, unit?: string, ordinal?: boolean, locale?: string): HumanizerSpellResult {
