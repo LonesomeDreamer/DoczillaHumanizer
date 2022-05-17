@@ -31,17 +31,29 @@ export default class HumanizerNumberSpeller {
 			return unit;
 		}
 
-		if (this.isUncountable(unit)) {
-			return unit;
-		}
-
 		var result: string = unit;
+		var singulars = EnglishNumberToWordsConverter.singulars;
 
-		for (var i: number = rules.length - 1; i >= 0; i--) {
-			if ((result = this.apply(rules[i], unit)) != null) {
+		for (var i: number = singulars.length - 1; i >= 0; i--) {
+			if ((result = this.apply(singulars[i], unit)) != null) {
 				break;
 			}
 		}
+
+		result = result == null ? unit : result;
+
+		if (this.isUncountable(result)) {
+			return result;
+		}
+
+		if (rules != singulars) {
+			for (var i: number = rules.length - 1; i >= 0; i--) {
+				if ((result = this.apply(rules[i], unit)) != null) {
+					break;
+				}
+			}
+		}
+
 		return result != null ? this.matchUpperCase(unit, result) : result;
 	}
 
