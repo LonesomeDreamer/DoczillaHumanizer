@@ -102,8 +102,17 @@ export default class EnglishNumberToWordsConverter {
 	]
 
 	static complexWords: RegExp[] = [
-		/^(.+?)(-in-.+?)$/,
-		/^(.+?)(-by)$/,
+		/^(.+?)(-in-.+?)$/i,
+		/^(.+?)(-by)$/i,
+	]
+
+	static possessiveForms: RegExp[] = [
+		/^(.*?s)(\')$/i,
+		/^(.+?)(\'s)$/i,
+	]
+
+	static possessiveFormSpecialEndings: RegExp[] = [
+		/^(.*?)(s)$/i,
 	]
 
 	static uncountables = {
