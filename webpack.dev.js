@@ -4,7 +4,7 @@ const outputFileName = "pro.doczilla.linguistics.js.js";
 module.exports = {
 	mode: "development",
 	devtool: 'inline-source-map',
-	entry: "./src/index.ts",
+	entry: "./src/js/index.ts",
 	target: ['web', 'es5'],
 	module: {
 		rules: [

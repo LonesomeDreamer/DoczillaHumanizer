@@ -3,7 +3,7 @@ const outputFileName = "pro.doczilla.linguistics.js.js";
 
 module.exports = {
 	mode: "production",
-	entry: "./src/index.ts",
+	entry: "./src/js/index.ts",
 	target: ['web', 'es5'],
 	module: {
 		rules: [
