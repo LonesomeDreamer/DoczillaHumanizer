@@ -1,11 +1,20 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const outputFileName = "pro.doczilla.linguistics.js.js";
+const outputDir = "target/web/debug";
 
 module.exports = {
 	mode: "development",
 	devtool: 'inline-source-map',
 	entry: "./src/js/index.ts",
 	target: ['web', 'es5'],
+	plugins: [
+		new CopyPlugin({
+			patterns: [
+				{ from: "./src/test", to: './' },
+			],
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -19,11 +28,11 @@ module.exports = {
 	},
 	output: {
 		library: {
-			name: "Humanizer_dev",
+			name: "Humanizer",
 			type: "var",
 		},
 		filename: outputFileName,
 		globalObject: "this",
-		path: path.resolve(__dirname, "target/web/debug"),
+		path: path.resolve(__dirname, outputDir),
 	},
 };

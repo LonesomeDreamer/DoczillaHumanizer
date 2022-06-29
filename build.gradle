@@ -1,0 +1,39 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'http://mvn.revoltsoft.ru/' }
+		maven { url 'https://plugins.gradle.org/m2/' }
+	}
+	dependencies {
+		classpath 'org.zenframework.z8:z8-gradle-plugin:1.1.5'
+		classpath 'gradle.plugin.com.dorongold.plugins:task-tree:1.5'
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven { url 'http://mvn.revoltsoft.ru/' }
+}
+
+group = 'pro.doczilla'
+version = '1.0'
+
+apply plugin: 'z8-js'
+
+def windows = org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS)
+ext.npmCmd = windows ? 'npm.cmd' : 'npm'
+
+task npmInstall(type: Exec) {
+	workingDir projectDir
+	commandLine npmCmd, 'install'
+}
+
+task buildJs(type: Exec) {
+	dependsOn npmInstall
+	workingDir projectDir
+	commandLine npmCmd, 'run', 'build'
+}
+
+project.tasks.assembleJs.dependsOn project.tasks.buildJs

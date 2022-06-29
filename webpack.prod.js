@@ -1,10 +1,19 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const outputFileName = "pro.doczilla.linguistics.js.js";
+const outputDir = "target/web";
 
 module.exports = {
 	mode: "production",
 	entry: "./src/js/index.ts",
 	target: ['web', 'es5'],
+	plugins: [
+		new CopyPlugin({
+			patterns: [
+				{ from: "./src/test", to: './' },
+			],
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -23,6 +32,6 @@ module.exports = {
 		},
 		filename: outputFileName,
 		globalObject: "this",
-		path: path.resolve(__dirname, "target/web"),
+		path: path.resolve(__dirname, outputDir),
 	},
 };
