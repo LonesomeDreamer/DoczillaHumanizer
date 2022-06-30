@@ -10,7 +10,13 @@ module.exports = {
 	plugins: [
 		new CopyPlugin({
 			patterns: [
-				{ from: "./src/test", to: './' },
+				{
+					from: "./src/test",
+					to: './',
+					info: {
+						minimized: true
+					},
+				},
 			],
 		}),
 	],
