@@ -1,16 +1,3 @@
-buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		maven { url 'http://mvn.revoltsoft.ru/' }
-		maven { url 'https://plugins.gradle.org/m2/' }
-	}
-	dependencies {
-		classpath 'org.zenframework.z8:z8-gradle-plugin:1.1.5'
-		classpath 'gradle.plugin.com.dorongold.plugins:task-tree:1.5'
-	}
-}
-
 repositories {
 	mavenLocal()
 	mavenCentral()
@@ -20,7 +7,15 @@ repositories {
 group = 'pro.doczilla'
 version = '1.0'
 
-apply plugin: 'z8-js'
+buildDir = 'target'
+
+apply plugin: 'base'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+configurations.default.attributes {
+	attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, project.objects.named(LibraryElements, 'web'))
+}
 
 def windows = org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS)
 ext.npmCmd = windows ? 'npm.cmd' : 'npm'
@@ -36,4 +31,32 @@ task buildJs(type: Exec) {
 	commandLine npmCmd, 'run', 'build'
 }
 
-project.tasks.assembleJs.dependsOn project.tasks.buildJs
+task webZip(type: Zip) {
+	dependsOn buildJs
+	group 'Build'
+	description 'Assemble JS archive'
+
+	archiveName "${project.name}-${project.version}.zip"
+	destinationDir project.file("${project.buildDir}/libs/")
+
+	from(project.buildDir) {
+		include 'web/pro.doczilla.linguistics.js.js'
+	}
+}
+
+build.dependsOn webZip
+
+artifacts.add('default', webZip) {
+	builtBy webZip
+}
+
+publishing {
+	repositories {
+		mavenLocal()
+	}
+	publications {
+		maven(MavenPublication) {
+			artifact source: webZip, extension: 'zip'
+		}
+	}
+}
